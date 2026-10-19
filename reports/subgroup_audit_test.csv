@@ -1,0 +1,27 @@
+attribute,group,n,actual_approval_rate,predicted_approval_rate,false_approve_rate,false_approve_95ci,n_rejected,false_reject_rate,false_reject_95ci,n_approved,small_sample_warning
+derived_race,2 or more minority races,120,0.6083,0.525,0.1915,"(np.float64(0.1042), np.float64(0.3254))",47,0.2603,"(np.float64(0.1734), np.float64(0.3711))",73,False
+derived_race,American Indian or Alaska Native,161,0.5776,0.4348,0.1029,"(np.float64(0.0508), np.float64(0.1976))",68,0.3226,"(np.float64(0.2362), np.float64(0.423))",93,False
+derived_race,Asian,1681,0.8019,0.8007,0.3093,"(np.float64(0.2621), np.float64(0.3609))",333,0.0779,"(np.float64(0.0648), np.float64(0.0934))",1348,False
+derived_race,Black or African American,5919,0.6488,0.5879,0.2525,"(np.float64(0.2343), np.float64(0.2716))",2079,0.2305,"(np.float64(0.2174), np.float64(0.2441))",3840,False
+derived_race,Free Form Text Only,12,0.4167,0.4167,0.1429,"(np.float64(0.0257), np.float64(0.5131))",7,0.2,"(np.float64(0.0362), np.float64(0.6245))",5,True
+derived_race,Joint,635,0.8094,0.7134,0.281,"(np.float64(0.2086), np.float64(0.3669))",121,0.1848,"(np.float64(0.1536), np.float64(0.2207))",514,False
+derived_race,Native Hawaiian or Other Pacific Islander,65,0.5538,0.4308,0.1034,"(np.float64(0.0358), np.float64(0.2639))",29,0.3056,"(np.float64(0.18), np.float64(0.4686))",36,True
+derived_race,Race Not Available,4888,0.6661,0.5724,0.2157,"(np.float64(0.1964), np.float64(0.2363))",1632,0.2488,"(np.float64(0.2342), np.float64(0.2639))",3256,False
+derived_race,White,18739,0.7914,0.64,0.2226,"(np.float64(0.2098), np.float64(0.2359))",3909,0.25,"(np.float64(0.2431), np.float64(0.257))",14830,False
+derived_ethnicity,Ethnicity Not Available,4584,0.6638,0.5674,0.2103,"(np.float64(0.1906), np.float64(0.2313))",1541,0.2517,"(np.float64(0.2366), np.float64(0.2675))",3043,False
+derived_ethnicity,Free Form Text Only,19,0.3684,0.4211,0.1667,"(np.float64(0.047), np.float64(0.448))",12,0.1429,"(np.float64(0.0257), np.float64(0.5131))",7,True
+derived_ethnicity,Hispanic or Latino,2035,0.684,0.5862,0.182,"(np.float64(0.1541), np.float64(0.2136))",643,0.227,"(np.float64(0.2058), np.float64(0.2498))",1392,False
+derived_ethnicity,Joint,584,0.8065,0.7072,0.292,"(np.float64(0.2161), np.float64(0.3816))",113,0.1932,"(np.float64(0.1601), np.float64(0.2313))",471,False
+derived_ethnicity,Not Hispanic or Latino,24998,0.7633,0.6409,0.2414,"(np.float64(0.2306), np.float64(0.2524))",5916,0.2352,"(np.float64(0.2293), np.float64(0.2413))",19082,False
+derived_sex,Female,8769,0.7035,0.5785,0.2023,"(np.float64(0.1873), np.float64(0.2182))",2600,0.2629,"(np.float64(0.2521), np.float64(0.2741))",6169,False
+derived_sex,Joint,11022,0.8266,0.7254,0.3161,"(np.float64(0.2956), np.float64(0.3373))",1911,0.1888,"(np.float64(0.1809), np.float64(0.1969))",9111,False
+derived_sex,Male,10225,0.7188,0.5892,0.2139,"(np.float64(0.1993), np.float64(0.2293))",2875,0.2639,"(np.float64(0.254), np.float64(0.2741))",7350,False
+derived_sex,Sex Not Available,2204,0.6193,0.5186,0.1895,"(np.float64(0.1644), np.float64(0.2174))",839,0.2791,"(np.float64(0.256), np.float64(0.3035))",1365,False
+applicant_age,25-34,5024,0.793,0.6969,0.2154,"(np.float64(0.1915), np.float64(0.2414))",1040,0.1775,"(np.float64(0.1659), np.float64(0.1896))",3984,False
+applicant_age,35-44,6701,0.7442,0.6633,0.2468,"(np.float64(0.227), np.float64(0.2678))",1714,0.1935,"(np.float64(0.1828), np.float64(0.2047))",4987,False
+applicant_age,45-54,6382,0.7197,0.6333,0.2717,"(np.float64(0.2516), np.float64(0.2927))",1789,0.2258,"(np.float64(0.2139), np.float64(0.2381))",4593,False
+applicant_age,55-64,6946,0.7299,0.5989,0.2292,"(np.float64(0.2108), np.float64(0.2488))",1876,0.2643,"(np.float64(0.2523), np.float64(0.2766))",5070,False
+applicant_age,65-74,4624,0.7489,0.5744,0.1869,"(np.float64(0.1655), np.float64(0.2104))",1161,0.2957,"(np.float64(0.2807), np.float64(0.3111))",3463,False
+applicant_age,8888,58,0.9138,0.8966,0.8,"(np.float64(0.3755), np.float64(0.9638))",5,0.0943,"(np.float64(0.041), np.float64(0.2025))",53,True
+applicant_age,<25,788,0.8096,0.6967,0.1867,"(np.float64(0.1324), np.float64(0.2566))",150,0.1834,"(np.float64(0.1553), np.float64(0.2153))",638,False
+applicant_age,>74,1697,0.7113,0.4897,0.1878,"(np.float64(0.1557), np.float64(0.2247))",490,0.3877,"(np.float64(0.3606), np.float64(0.4155))",1207,False

@@ -1,0 +1,205 @@
+{
+  "numeric": {
+    "income_k": {
+      "label": "Gross annual income (thousand USD)",
+      "train_p01": 21.0,
+      "train_median": 97.0,
+      "train_p99": 632.0
+    },
+    "loan_amount_usd": {
+      "label": "Loan amount (USD)",
+      "train_p01": 15000.0,
+      "train_median": 205000.0,
+      "train_p99": 845000.0
+    },
+    "loan_to_income": {
+      "label": "Loan amount \u00f7 annual income",
+      "train_p01": 0.1542108554957307,
+      "train_median": 2.1373889668069195,
+      "train_p99": 7.430876330876342
+    },
+    "loan_to_value_ratio": {
+      "label": "Loan-to-value (%)",
+      "train_p01": 9.80851,
+      "train_median": 79.912,
+      "train_p99": 104.91119999999997
+    },
+    "property_value": {
+      "label": "Property value (USD, rounded by publisher)",
+      "train_p01": 65000.0,
+      "train_median": 385000.0,
+      "train_p99": 1425000.0
+    },
+    "loan_term": {
+      "label": "Loan term (months)",
+      "train_p01": 76.31999999999994,
+      "train_median": 360.0,
+      "train_p99": 480.0
+    }
+  },
+  "categorical": {
+    "loan_type": {
+      "label": "Loan type",
+      "values_seen_in_train": [
+        "1",
+        "2",
+        "3",
+        "4"
+      ],
+      "code_labels": {
+        "1": "Conventional",
+        "2": "FHA",
+        "3": "VA",
+        "4": "USDA RHS/FSA"
+      }
+    },
+    "loan_purpose": {
+      "label": "Loan purpose",
+      "values_seen_in_train": [
+        "1",
+        "2",
+        "31",
+        "32",
+        "4",
+        "5"
+      ],
+      "code_labels": {
+        "1": "Home purchase",
+        "2": "Home improvement",
+        "31": "Refinancing",
+        "32": "Cash-out refinancing",
+        "4": "Other purpose",
+        "5": "Not applicable"
+      }
+    },
+    "lien_status": {
+      "label": "Lien status",
+      "values_seen_in_train": [
+        "1",
+        "2"
+      ],
+      "code_labels": {
+        "1": "First lien",
+        "2": "Subordinate lien"
+      }
+    },
+    "occupancy_type": {
+      "label": "Occupancy",
+      "values_seen_in_train": [
+        "1",
+        "2",
+        "3"
+      ],
+      "code_labels": {
+        "1": "Principal residence",
+        "2": "Second residence",
+        "3": "Investment property"
+      }
+    },
+    "preapproval": {
+      "label": "Preapproval requested",
+      "values_seen_in_train": [
+        "1",
+        "2"
+      ],
+      "code_labels": {
+        "1": "Requested",
+        "2": "Not requested"
+      }
+    },
+    "derived_dwelling_category": {
+      "label": "Dwelling category",
+      "values_seen_in_train": [
+        "Multifamily:Site-Built",
+        "Single Family (1-4 Units):Manufactured",
+        "Single Family (1-4 Units):Site-Built"
+      ],
+      "code_labels": {}
+    },
+    "open_end_line_of_credit": {
+      "label": "Open-end line of credit",
+      "values_seen_in_train": [
+        "1",
+        "1111",
+        "2"
+      ],
+      "code_labels": {
+        "1": "Open-end",
+        "2": "Not open-end",
+        "1111": "Exempt"
+      }
+    },
+    "metro_area": {
+      "label": "Property in a metro area (MSA/MD)",
+      "values_seen_in_train": [
+        "Metro",
+        "Non-metro"
+      ],
+      "code_labels": {
+        "Metro": "Metro (MSA/MD)",
+        "Non-metro": "Not in an MSA/MD"
+      }
+    },
+    "has_coapplicant": {
+      "label": "Has co-applicant",
+      "values_seen_in_train": [
+        "No",
+        "Unknown",
+        "Yes"
+      ],
+      "code_labels": {
+        "Yes": "Yes",
+        "No": "No",
+        "Unknown": "Unknown (exempt reporter)"
+      }
+    },
+    "debt_to_income_ratio": {
+      "label": "Debt-to-income (published bins)",
+      "values_seen_in_train": [
+        "20%-<30%",
+        "30%-<36%",
+        "36",
+        "37",
+        "38",
+        "39",
+        "40",
+        "41",
+        "42",
+        "43",
+        "44",
+        "45",
+        "46",
+        "47",
+        "48",
+        "49",
+        "50%-60%",
+        "<20%",
+        ">60%",
+        "Exempt",
+        "NA"
+      ],
+      "code_labels": {}
+    }
+  },
+  "derived": {
+    "loan_to_income": "loan_amount_usd / (income_k * 1000); computed by the app, not entered"
+  },
+  "order": [
+    "income_k",
+    "loan_amount_usd",
+    "loan_to_income",
+    "loan_to_value_ratio",
+    "property_value",
+    "loan_term",
+    "loan_type",
+    "loan_purpose",
+    "lien_status",
+    "occupancy_type",
+    "preapproval",
+    "derived_dwelling_category",
+    "open_end_line_of_credit",
+    "metro_area",
+    "has_coapplicant",
+    "debt_to_income_ratio"
+  ]
+}

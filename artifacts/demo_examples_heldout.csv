@@ -1,0 +1,13 @@
+row_id,income_k,loan_amount_usd,loan_to_income,loan_to_value_ratio,property_value,loan_term,loan_type,loan_purpose,lien_status,occupancy_type,preapproval,derived_dwelling_category,open_end_line_of_credit,metro_area,has_coapplicant,debt_to_income_ratio,prob_approved,predicted,actual
+2024-032468,215.0,325000.0,1.5116279069767442,75.0,435000.0,360.0,1,1,1,2,1,Single Family (1-4 Units):Site-Built,2,Non-metro,Yes,40,1.0,Approved,Approved
+2024-022019,205.0,235000.0,1.146341463414634,100.0,225000.0,360.0,3,1,1,1,2,Single Family (1-4 Units):Site-Built,2,Metro,Yes,36,0.9118,Approved,Approved
+2024-024672,250.0,405000.0,1.62,85.0,475000.0,360.0,1,1,1,1,1,Single Family (1-4 Units):Site-Built,2,Non-metro,No,<20%,1.0,Approved,Approved
+2024-028784,150.0,145000.0,0.9666666666666667,75.0,195000.0,360.0,1,31,1,1,2,Single Family (1-4 Units):Site-Built,2,Metro,No,30%-<36%,0.8085,Approved,Rejected
+2024-006812,77.0,385000.0,5.0,96.5,395000.0,360.0,2,1,1,1,2,Single Family (1-4 Units):Site-Built,2,Metro,No,50%-60%,0.8477,Approved,Rejected
+2024-025573,207.0,185000.0,0.893719806763285,72.0,525000.0,240.0,1,32,2,1,2,Single Family (1-4 Units):Site-Built,2,Metro,Yes,37,0.9403,Approved,Rejected
+2024-028427,200.0,195000.0,0.975,85.0,525000.0,240.0,1,32,2,1,2,Single Family (1-4 Units):Site-Built,2,Non-metro,No,40,0.5808,Rejected,Approved
+2024-029666,63.0,25000.0,0.3968253968253968,75.78,325000.0,360.0,1,32,2,1,2,Single Family (1-4 Units):Site-Built,2,Metro,No,42,0.593,Rejected,Approved
+2024-008513,324.0,305000.0,0.941358024691358,35.81,1245000.0,360.0,1,31,2,1,2,Single Family (1-4 Units):Site-Built,1,Non-metro,Yes,20%-<30%,0.593,Rejected,Approved
+2024-003299,42.0,55000.0,1.3095238095238095,100.0,55000.0,300.0,1,1,1,1,2,Single Family (1-4 Units):Manufactured,2,Non-metro,Yes,<20%,0.0108,Rejected,Rejected
+2024-024094,34.0,25000.0,0.7352941176470589,73.85,265000.0,360.0,2,32,1,1,2,Single Family (1-4 Units):Site-Built,2,Metro,No,>60%,0.0108,Rejected,Rejected
+2024-025294,96.0,155000.0,1.6145833333333333,68.284,225000.0,360.0,3,32,1,1,2,Single Family (1-4 Units):Site-Built,2,Metro,No,NA,0.1346,Rejected,Rejected

@@ -1,0 +1,162 @@
+{
+  "filter_log": [
+    {
+      "year": 2023,
+      "step": "raw rows (actions 1,2,3 from API query)",
+      "rows": 30784
+    },
+    {
+      "year": 2023,
+      "step": "exclude business/commercial-purpose applications",
+      "rows": 29448
+    },
+    {
+      "year": 2023,
+      "step": "exclude reverse mortgages",
+      "rows": 29346
+    },
+    {
+      "year": 2023,
+      "step": "require a positive loan amount",
+      "rows": 29346
+    },
+    {
+      "year": 2024,
+      "step": "raw rows (actions 1,2,3 from API query)",
+      "rows": 33896
+    },
+    {
+      "year": 2024,
+      "step": "exclude business/commercial-purpose applications",
+      "rows": 32307
+    },
+    {
+      "year": 2024,
+      "step": "exclude reverse mortgages",
+      "rows": 32220
+    },
+    {
+      "year": 2024,
+      "step": "require a positive loan amount",
+      "rows": 32220
+    }
+  ],
+  "class_counts": {
+    "train": {
+      "Approved": 17269,
+      "Rejected": 6207
+    },
+    "val": {
+      "Approved": 4318,
+      "Rejected": 1552
+    },
+    "test": {
+      "Approved": 23995,
+      "Rejected": 8225
+    }
+  },
+  "action_taken_counts": [
+    {
+      "activity_year": "2023",
+      "action_taken": "1",
+      "n": 20808
+    },
+    {
+      "activity_year": "2023",
+      "action_taken": "2",
+      "n": 779
+    },
+    {
+      "activity_year": "2023",
+      "action_taken": "3",
+      "n": 7759
+    },
+    {
+      "activity_year": "2024",
+      "action_taken": "1",
+      "n": 23084
+    },
+    {
+      "activity_year": "2024",
+      "action_taken": "2",
+      "n": 911
+    },
+    {
+      "activity_year": "2024",
+      "action_taken": "3",
+      "n": 8225
+    }
+  ],
+  "missingness_audit": [
+    {
+      "feature": "income_k",
+      "missing_overall": 0.0237,
+      "missing_approved": 0.0164,
+      "missing_rejected": 0.0438,
+      "gap": 0.0274,
+      "decision": "core (missing values imputed + flagged by audit)"
+    },
+    {
+      "feature": "loan_amount_usd",
+      "missing_overall": 0.0,
+      "missing_approved": 0.0,
+      "missing_rejected": 0.0,
+      "gap": 0.0,
+      "decision": "core (missing values imputed + flagged by audit)"
+    },
+    {
+      "feature": "loan_to_income",
+      "missing_overall": 0.0237,
+      "missing_approved": 0.0164,
+      "missing_rejected": 0.0438,
+      "gap": 0.0274,
+      "decision": "core (missing values imputed + flagged by audit)"
+    },
+    {
+      "feature": "loan_to_value_ratio",
+      "missing_overall": 0.0863,
+      "missing_approved": 0.0602,
+      "missing_rejected": 0.1589,
+      "gap": 0.0986,
+      "decision": "include"
+    },
+    {
+      "feature": "property_value",
+      "missing_overall": 0.0526,
+      "missing_approved": 0.0437,
+      "missing_rejected": 0.0773,
+      "gap": 0.0336,
+      "decision": "include"
+    },
+    {
+      "feature": "loan_term",
+      "missing_overall": 0.0446,
+      "missing_approved": 0.038,
+      "missing_rejected": 0.0628,
+      "gap": 0.0248,
+      "decision": "include"
+    },
+    {
+      "feature": "debt_to_income_ratio",
+      "missing_overall": 0.0469,
+      "missing_approved": 0.0409,
+      "missing_rejected": 0.0636,
+      "gap": 0.0227,
+      "decision": "include"
+    }
+  ],
+  "rich_features_allowed": [
+    "loan_to_value_ratio",
+    "property_value",
+    "loan_term",
+    "debt_to_income_ratio"
+  ],
+  "duplicates": {
+    "exact_full_row_duplicates": 47,
+    "rows_sharing_identical_feature_vectors": 815,
+    "feature_vectors_appearing_in_more_than_one_split": 112,
+    "policy": "Kept. HMDA privacy rounding/binning can make different applicants identical, and there is no applicant ID to group on, so rows are not deduplicated. Counts are reported for transparency."
+  },
+  "income_units": "HMDA income is thousands of USD; income_k<=0 treated as missing; loan_to_income uses income_k*1000",
+  "loan_amount_values_ending_5000_share": 1.0
+}

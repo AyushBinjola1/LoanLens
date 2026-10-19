@@ -1,0 +1,89 @@
+{
+  "model_version": "loanlens-20261019-172938",
+  "validation": {
+    "threshold": 0.6,
+    "n": 5870,
+    "accuracy": 0.8511073253833049,
+    "balanced_accuracy": 0.8051034867230438,
+    "macro_f1": 0.8072510322389159,
+    "per_class": {
+      "Approved": {
+        "precision": 0.8956801470588235,
+        "recall": 0.9027327466419639,
+        "f1-score": 0.8991926182237601,
+        "support": 4318.0
+      },
+      "Rejected": {
+        "precision": 0.7233201581027668,
+        "recall": 0.7074742268041238,
+        "f1-score": 0.7153094462540717,
+        "support": 1552.0
+      }
+    },
+    "confusion_matrix": {
+      "labels": [
+        "Approved",
+        "Rejected"
+      ],
+      "rows_actual_cols_predicted": [
+        [
+          3898,
+          420
+        ],
+        [
+          454,
+          1098
+        ]
+      ]
+    },
+    "roc_auc": 0.8874487132502161,
+    "pr_auc_approved_positive": 0.9444156969106823,
+    "pr_auc_rejected_positive": 0.7982676491516791,
+    "brier": 0.10233116226983284,
+    "base_rate_approved": 0.7356047700170357
+  },
+  "test": {
+    "threshold": 0.6,
+    "n": 32220,
+    "accuracy": 0.7651458721291123,
+    "balanced_accuracy": 0.7662515683675234,
+    "macro_f1": 0.7272418803078717,
+    "per_class": {
+      "Approved": {
+        "precision": 0.9059102589444554,
+        "recall": 0.7639924984371744,
+        "f1-score": 0.8289208925866474,
+        "support": 23995.0
+      },
+      "Rejected": {
+        "precision": 0.5274532710280374,
+        "recall": 0.7685106382978724,
+        "f1-score": 0.625562868029096,
+        "support": 8225.0
+      }
+    },
+    "confusion_matrix": {
+      "labels": [
+        "Approved",
+        "Rejected"
+      ],
+      "rows_actual_cols_predicted": [
+        [
+          18332,
+          5663
+        ],
+        [
+          1904,
+          6321
+        ]
+      ]
+    },
+    "roc_auc": 0.8558608043342363,
+    "pr_auc_approved_positive": 0.9318624651614053,
+    "pr_auc_rejected_positive": 0.7423936031338272,
+    "brier": 0.12757237916288644,
+    "base_rate_approved": 0.744723774053383,
+    "inference_ms_per_row_batch": 0.007381455617691469,
+    "test_run_number_for_this_model_version": 1
+  }
+}

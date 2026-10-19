@@ -1,0 +1,34 @@
+# LoanLens configuration. All paths are relative to the repo root.
+
+[source]
+publisher = "Consumer Financial Protection Bureau (CFPB) / FFIEC — HMDA Platform"
+api_base = "https://ffiec.cfpb.gov/v2/data-browser-api/view/csv"
+api_docs = "https://ffiec.cfpb.gov/documentation/api/data-browser/"
+field_docs = "https://ffiec.cfpb.gov/documentation/publications/loan-level-datasets/lar-data-fields"
+state = "DE"
+train_year = 2023
+test_year = 2024
+actions_taken = [1, 2, 3]
+
+[paths]
+raw_dir = "data/raw"
+processed_dir = "processed"
+artifacts_dir = "artifacts"
+reports_dir = "reports"
+
+[target]
+approved_codes = [1, 2]   # 1 originated, 2 approved but not accepted
+rejected_codes = [3]      # 3 denied
+positive_label = "Approved"
+
+[split]
+validation_fraction = 0.2   # carved from the TRAIN year only, stratified
+random_state = 42
+
+[train]
+cv_folds = 5
+# Threshold policy: costs of DISAGREEING with the historical decision,
+# not default losses. Wrongly predicting Approved for a historically
+# Rejected application is weighted 2x a wrong Rejected.
+cost_false_approve = 2.0
+cost_false_reject = 1.0

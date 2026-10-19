@@ -1,0 +1,55 @@
+{
+  "model_version": "loanlens-20261019-172938",
+  "selected_model": "Gradient Boosting (HistGB)",
+  "best_params": {
+    "clf__learning_rate": 0.1,
+    "clf__max_leaf_nodes": 31
+  },
+  "selection_rule": "highest mean 5-fold stratified CV ROC-AUC on the 2023 train split",
+  "calibration": {
+    "method": "isotonic",
+    "fit_on": "validation split (2023)",
+    "val_brier_uncalibrated": 0.12252525816723661,
+    "val_brier_sigmoid": 0.10389928766294794,
+    "val_brier_isotonic": 0.10233116226983284
+  },
+  "threshold": 0.6,
+  "threshold_policy": {
+    "cost_false_approve": 2.0,
+    "cost_false_reject": 1.0,
+    "meaning": "costs of disagreeing with the historical decision; not observed losses",
+    "chosen_on": "validation split",
+    "val_expected_cost": 0.2262350936967632
+  },
+  "val_roc_auc_calibrated": 0.8874487132502161,
+  "features": [
+    "income_k",
+    "loan_amount_usd",
+    "loan_to_income",
+    "loan_to_value_ratio",
+    "property_value",
+    "loan_term",
+    "loan_type",
+    "loan_purpose",
+    "lien_status",
+    "occupancy_type",
+    "preapproval",
+    "derived_dwelling_category",
+    "open_end_line_of_credit",
+    "metro_area",
+    "has_coapplicant",
+    "debt_to_income_ratio"
+  ],
+  "positive_class": "Approved",
+  "rows": {
+    "train": 23476,
+    "val": 5870
+  },
+  "versions": {
+    "python": "3.14.5",
+    "sklearn": "1.9.1",
+    "pandas": "3.0.5",
+    "numpy": "2.5.3"
+  },
+  "model_file_bytes": 138021
+}
