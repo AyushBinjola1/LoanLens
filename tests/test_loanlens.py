@@ -35,7 +35,7 @@ def _fixture_row(**kw):
             "lien_status": "1", "occupancy_type": "1", "preapproval": "2",
             "derived_dwelling_category": "Single Family (1-4 Units):Site-Built",
             "open-end_line_of_credit": "2", "derived_msa-md": "20100",
-            "co-applicant_credit_score_type": "10", "combined_loan_to_value_ratio": "80.0",
+            "co-applicant_credit_score_type": "10", "loan_to_value_ratio": "80.0",
             "property_value": "325000", "loan_term": "360", "debt_to_income_ratio": "36"}
     base.update(kw)
     return pd.DataFrame([base])
@@ -120,3 +120,45 @@ def test_batch_schema_errors_are_row_level():
     assert list(err.row.unique()) == [1] and len(X) == 2
     with pytest.raises(ValueError):
         prepare(rows.drop(columns=["loan_type"]), schema)
+
+
+@need_model
+def test_batch_can_rescore_sample_and_previous_predictions():
+    from loanlens.predict import batch_output, load, prepare, score
+    model, schema, meta = load()
+    raw = pd.read_csv(path("artifacts_dir") / "demo_examples_heldout.csv", dtype=str)
+    X, err = prepare(raw, schema)
+    assert err.empty
+    predictions = score(model, meta, X)
+    out = batch_output(raw, predictions)
+    assert out.columns.is_unique
+    pd.testing.assert_frame_equal(out[predictions.columns], predictions)
+    pd.testing.assert_frame_equal(batch_output(out, predictions), out)
+    assert out.row_id.equals(raw.row_id)
+
+
+@need_model
+@pytest.mark.parametrize("value", ["inf", "-inf", "Infinity"])
+def test_nonfinite_numbers_are_row_errors(value):
+    from loanlens.predict import load, prepare
+    _, schema, _ = load()
+    raw = pd.read_csv(path("artifacts_dir") / "demo_examples_heldout.csv", dtype=str).head(2)
+    raw.loc[0, "income_k"] = value
+    X, err = prepare(raw, schema)
+    assert list(X.index) == [1]
+    assert 0 in err.row.values
+
+
+@need_model
+@need_data
+def test_local_explanation_is_finite_and_covers_features():
+    from loanlens.explain import explain_rows, make_explainer
+    from loanlens.predict import load
+    model, schema, _ = load()
+    d = pd.read_parquet(DATA)
+    background = d.loc[d.split == "train", schema["order"]].head(100)
+    X = d.loc[d.split == "test", schema["order"]].head(2)
+    result = explain_rows(make_explainer(model, background), X, schema["order"])
+    assert list(result.columns) == schema["order"]
+    assert result.index.equals(X.index)
+    assert np.isfinite(result.to_numpy()).all()

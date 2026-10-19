@@ -15,7 +15,7 @@ import streamlit as st  # noqa: E402
 
 from loanlens import features as F  # noqa: E402
 from loanlens.common import CFG, path, read_json  # noqa: E402
-from loanlens.predict import ModelNotTrained, load, prepare, score, unseen_categories  # noqa: E402
+from loanlens.predict import ModelNotTrained, batch_output, load, prepare, score, unseen_categories  # noqa: E402
 
 st.set_page_config(page_title="LoanLens", page_icon="🔎", layout="wide")
 st.markdown("""<style>
@@ -49,7 +49,12 @@ def get_data():
 def get_explainer(_model, cols):
     from loanlens.explain import make_explainer
     d = get_data()
-    bg = d[d.split == "train"][cols].sample(300, random_state=0)
+    if d is None:
+        raise ValueError("The processed training dataset is required for explanations.")
+    train = d[d.split == "train"][cols]
+    if train.empty:
+        raise ValueError("No training rows are available for explanations.")
+    bg = train.sample(min(300, len(train)), random_state=0)
     return make_explainer(_model, bg)
 
 
@@ -108,27 +113,30 @@ elif page == "Data Explorer":
     d = data[data.split.isin(splits) & data.loan_purpose.isin(purposes)].copy()
     d["Outcome"] = d[F.TARGET].map(F.CLASS_NAMES)
     st.caption(f"{len(d):,} real records match the filters.")
+    if d.empty:
+        st.info("No records match these filters. Select at least one split and loan purpose.")
+        st.stop()
     a, b = st.columns(2)
     cb = d.groupby(["split", "Outcome"]).size().reset_index(name="n")
     a.plotly_chart(px.bar(cb, x="split", y="n", color="Outcome", barmode="group", title="Class balance by split"),
-                   use_container_width=True)
+                   width="stretch")
     feat = b.selectbox("Distribution of", F.CORE_NUMERIC + F.CANDIDATE_NUMERIC,
                        format_func=lambda c: F.HUMAN_LABELS[c])
     lo, hi = d[feat].quantile([0.01, 0.99])
     b.plotly_chart(px.histogram(d[d[feat].between(lo, hi)], x=feat, color="Outcome", nbins=60, barmode="overlay",
                                 histnorm="probability density", labels={feat: F.HUMAN_LABELS[feat]},
-                                title="Clipped to 1st–99th percentile"), use_container_width=True)
+                                title="Clipped to 1st–99th percentile"), width="stretch")
     catf = st.selectbox("Approval rate by", F.CORE_CATEGORICAL + F.CANDIDATE_CATEGORICAL,
                         format_func=lambda c: F.HUMAN_LABELS[c])
     g = d.groupby(catf)[F.TARGET].agg(["mean", "size"]).reset_index()
     g["label"] = g[catf].map(lambda v: F.CODE_LABELS.get(catf, {}).get(v, v))
     st.plotly_chart(px.bar(g, x="label", y="mean", hover_data=["size"], labels={"mean": "Historical approval rate",
                                                                                 "label": F.HUMAN_LABELS[catf]}),
-                    use_container_width=True)
+                    width="stretch")
     au = jfile(PROC / "data_audit.json")
     if au:
         st.subheader("Missingness audit (train split)")
-        st.dataframe(pd.DataFrame(au["missingness_audit"]), use_container_width=True, hide_index=True)
+        st.dataframe(pd.DataFrame(au["missingness_audit"]), width="stretch", hide_index=True)
 
 # ============================================================= SINGLE PREDICTION
 elif page == "Single Prediction":
@@ -139,7 +147,8 @@ elif page == "Single Prediction":
     st.caption(DISCLAIMER)
     test_rows = data[data.split == "test"] if data is not None else None
 
-    if st.button("📂 Load real held-out example", help=f"Random application from the {CFG['source']['test_year']} test year"):
+    if st.button("📂 Load real held-out example", help=f"Random application from the {CFG['source']['test_year']} test year",
+                 disabled=test_rows is None or test_rows.empty):
         r = test_rows.sample(1).iloc[0]
         st.session_state["loaded"] = r.to_dict()
         for c in schema["order"]:
@@ -201,7 +210,7 @@ elif page == "Single Prediction":
                                    marker_color=np.where(sv.values > 0, "#2e8b57", "#c0392b")))
             fig.update_layout(title=f"Local SHAP contributions toward Approved ({E['unit']} of the uncalibrated model)",
                               height=420, margin=dict(l=10, r=10, t=50, b=10))
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width="stretch")
             st.caption("Green pushes toward Approved, red toward Rejected. These are associations learned from historical "
                        "decisions, not causes, and not advice on how to get approved.")
         except Exception as e:
@@ -223,20 +232,23 @@ elif page == "Batch Prediction":
         st.download_button("Download real held-out sample rows", demo_fp.read_bytes(), "heldout_sample.csv")
     up = st.file_uploader("CSV file", type="csv")
     if up:
-        raw = pd.read_csv(up, dtype=str, keep_default_na=False)
         try:
+            raw = pd.read_csv(up, dtype=str, keep_default_na=False)
             X, err = prepare(raw, schema)
-        except ValueError as e:
+        except (ValueError, pd.errors.ParserError, UnicodeDecodeError) as e:
             st.error(str(e)); st.stop()
+        if raw.empty:
+            st.info("The CSV contains no application rows. Add rows to the template before uploading.")
+            st.stop()
         if len(err):
             st.error(f"{err.row.nunique()} row(s) rejected"); st.dataframe(err, hide_index=True)
         unseen = unseen_categories(X, schema)
         if unseen:
             st.warning(f"Categories not seen in training (treated as 'infrequent'/ignored by the encoder): {unseen}")
         if len(X):
-            out = raw.loc[X.index].join(score(model, meta, X))
+            out = batch_output(raw, score(model, meta, X))
             st.success(f"Scored {len(out):,} rows with the saved pipeline.")
-            st.dataframe(out.head(200), use_container_width=True)
+            st.dataframe(out.head(200), width="stretch")
             st.download_button("Download predictions", out.to_csv(index_label="input_row"), "loanlens_predictions.csv")
 
 # ============================================================== MODEL EVALUATION
@@ -253,7 +265,7 @@ elif page == "Model Evaluation":
                                     ("macro_f1", "Macro-F1"), ("roc_auc", "ROC-AUC"), ("brier", "Brier")]):
         col.metric(lab, f"{t[k]:.3f}", delta=f"{t[k] - v[k]:+.3f} vs val", delta_color="off")
     st.subheader("Per-class metrics (test)")
-    st.dataframe(pd.DataFrame(t["per_class"]).T.round(3), use_container_width=True)
+    st.dataframe(pd.DataFrame(t["per_class"]).T.round(3), width="stretch")
     st.write(f"PR-AUC with **Approved** as positive: {t['pr_auc_approved_positive']:.3f} "
              f"(baseline = approval rate {t['base_rate_approved']:.3f}); with **Rejected** as positive: "
              f"{t['pr_auc_rejected_positive']:.3f} (baseline {1 - t['base_rate_approved']:.3f}).")
@@ -269,12 +281,12 @@ elif page == "Model Evaluation":
         p = REP / fn
         if p.exists():
             st.subheader(name)
-            st.dataframe(pd.read_csv(p), use_container_width=True, hide_index=True)
+            st.dataframe(pd.read_csv(p), width="stretch", hide_index=True)
     tc = jfile(ART / "threshold_curve.json")
-    if tc:
+    if tc and meta:
         st.subheader("Threshold choice (validation)")
         st.plotly_chart(px.line(x=tc["thresholds"], y=tc["val_cost"], labels={"x": "threshold", "y": "expected disagreement cost"}),
-                        use_container_width=True)
+                        width="stretch")
         st.caption(f"Costs: false-approve = {meta['threshold_policy']['cost_false_approve']}, false-reject = "
                    f"{meta['threshold_policy']['cost_false_reject']}. These are costs of disagreeing with history, not loan losses.")
 
@@ -287,7 +299,7 @@ else:
     au = jfile(PROC / "data_audit.json")
     if au:
         st.subheader("Filtering log")
-        st.dataframe(pd.DataFrame(au["filter_log"]), hide_index=True, use_container_width=True)
+        st.dataframe(pd.DataFrame(au["filter_log"]), hide_index=True, width="stretch")
         st.subheader("Duplicates policy")
         st.json(au["duplicates"])
     st.markdown((ROOT / "docs" / "limitations.md").read_text() if (ROOT / "docs" / "limitations.md").exists() else "")

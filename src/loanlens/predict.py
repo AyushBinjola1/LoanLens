@@ -30,6 +30,10 @@ def required_inputs(schema: dict) -> list[str]:
 def prepare(df: pd.DataFrame, schema: dict) -> tuple[pd.DataFrame, pd.DataFrame]:
     """Returns (clean rows ready for the model, row-level error table)."""
     errors = []
+    if not df.columns.is_unique:
+        raise ValueError("Input column names must be unique.")
+    if not df.index.is_unique:
+        raise ValueError("Input row indices must be unique.")
     missing_cols = [c for c in required_inputs(schema) if c not in df.columns]
     if missing_cols:
         raise ValueError(f"Missing required columns: {missing_cols}")
@@ -42,6 +46,8 @@ def prepare(df: pd.DataFrame, schema: dict) -> tuple[pd.DataFrame, pd.DataFrame]
             bad = ~blank & X[c].isna()
             for i in X.index[bad]:
                 errors.append({"row": i, "column": c, "problem": f"not a number: {raw[i]!r}"})
+            for i in X.index[X[c].notna() & ~np.isfinite(X[c])]:
+                errors.append({"row": i, "column": c, "problem": "must be a finite number"})
             for i in X.index[X[c] < 0]:
                 errors.append({"row": i, "column": c, "problem": "negative value"})
     for i in X.index[X["loan_amount_usd"].isna() | (X["loan_amount_usd"] <= 0)]:
@@ -70,3 +76,11 @@ def score(model, meta, X: pd.DataFrame) -> pd.DataFrame:
     return pd.DataFrame({"prob_approved": np.round(p, 4),
                          "prediction": np.where(p >= t, "Approved", "Rejected"),
                          "threshold": t}, index=X.index)
+
+
+def batch_output(raw: pd.DataFrame, predictions: pd.DataFrame) -> pd.DataFrame:
+    """Keep input metadata, replacing any previous prediction columns on re-upload."""
+    out = raw.loc[predictions.index].copy()
+    for column in predictions:
+        out[column] = predictions[column]
+    return out

@@ -5,6 +5,19 @@ UCS321: AI for Engineers. This project is a supervised binary classifier trained
 HDFC Bank is only the assignment's business framing. The project has no affiliation with HDFC, no HDFC data, and no validation for Indian lending. Amounts are in USD.
 
 ## Setup
+The package includes a trained model, processed data, and evaluation reports, so
+you can run the dashboard without downloading data or retraining. On Windows:
+
+```powershell
+py -3.12 -m pip install -r requirements.txt
+py -3.12 -m streamlit run app/app.py
+```
+
+Stop any running dashboard before updating dependencies on Windows. Install the
+full requirements file in the same Python environment used to start Streamlit;
+`shap` is required for local explanations. The steps below are for rebuilding
+the model from the original data.
+
 ```bash
 python -m venv .venv && source .venv/bin/activate      # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
