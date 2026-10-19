@@ -2,7 +2,7 @@
 
 UCS321: AI for Engineers. This project is a supervised binary classifier trained on **real public US mortgage applications** from the CFPB/FFIEC HMDA Loan Application Register. It predicts whether lenders historically **Approved** or **Rejected** a comparable application, and it explains each prediction.
 
-HDFC Bank is only the assignment's business framing. The project has no affiliation with HDFC, no HDFC data, and no validation for Indian lending. Amounts are in USD.
+HDFC Bank is only the assignment's business framing. The project has no affiliation with HDFC, no HDFC data, and no validation for Indian lending. Amounts are in USD. 
 
 ## Setup
 The package includes a trained model, processed data, and evaluation reports, so
